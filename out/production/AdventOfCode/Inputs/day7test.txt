@@ -1,3 +1,7 @@
-shiny gold bags contain 2 muted olive bag, 1 dotted red bags
-bright red bags contain no other bags.
-muted olive bags contain 4 x y bags, 3 g k bags
+shiny gold bags contain 2 muted olive bag
+muted olive bags contain 2 k x bag
+k x bags contain 2 l a bags
+l a bags contain 2 e d bags
+e d bags contain 2 t r bags
+t r bags contain 2 o u bags
+o u bags contain no other bags

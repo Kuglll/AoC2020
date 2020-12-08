@@ -1,7 +1,4 @@
 import java.io.File
-import javax.script.ScriptEngine
-import javax.script.ScriptEngineManager
-
 
 fun main() {
 
@@ -72,53 +69,35 @@ fun checkIfListContainsShinyGoldBag(list: List<String>): Boolean{
     return false
 }
 
-fun howManyBagsDoesBagContain(bag: String, dict: HashMap<String, List<String>?>){
-    val list = mutableListOf<String>()
-    val map = hashMapOf<String, Int>()
-    map[bag] = 1
-    list.add(bag)
-    var stringus = ""
-    var plusAdded = false
-    var currentParentMultiplier = 1
-    val multipliers = mutableListOf<Int>()
+fun howManyBagsDoesBagContain(bag: String, dict: HashMap<String, List<String>?>): Int{
+    val list = mutableListOf<Bagunja>()
+    list.add(Bagunja(1, bag, 0, mutableListOf()))
+
+    var sum = 0
+    var currentMultipliers = mutableListOf<Int>()
+    currentMultipliers.add(1)
 
     while (!list.isEmpty()){
-        if (list.get(0).toCharArray().get(0) == '#'){
-            stringus = stringus.take(stringus.length-1)
-            stringus += ")+"
-            list.removeAt(0)
+
+        val currentBag = list.removeAt(0)
+        currentMultipliers = currentMultipliers.take(currentBag.level).toMutableList()
+        currentMultipliers.add(currentBag.number)
+        sum += currentMultipliers.reduce { acc, i -> acc * i }
+
+        if (dict[currentBag.name] == null) {
+            //konec rekurzije
         } else {
-
-            val currentBag = list[0]
-            val temp = list.removeAt(0)
-
-            if (plusAdded) {
-                //currentParentMultiplier *= map[temp]!!.toInt()
-                //multipliers.add(map[temp]!!.toInt())
-                stringus += map[temp]
-            } else {
-                stringus += "*(" + map[temp]
-            }
-
-            var indexShift = 0
-            if (dict[currentBag] == null) {
-                stringus += "+"
-                plusAdded = true
-            } else {
-                plusAdded = false
-                for (bage in dict[currentBag]!!) {
-                    val numberOfBags = bage.take(1).toInt()
-                    val bagunja = bage.split(" ").takeLast(2).joinToString(" ")
-                    map[bagunja] = numberOfBags
-                    list.add(indexShift++, bagunja)
-                }
-                list.add(indexShift, "#")
+            var shiftedIndex = 0
+            for (bage in dict[currentBag.name]!!) {
+                val numberOfBags = bage.take(1).toInt()
+                val bagunjaName = bage.split(" ").takeLast(2).joinToString(" ")
+                currentBag.otherBagunje!!.add(Bagunja(numberOfBags, bagunjaName, currentBag.level+1, mutableListOf()))
+                list.add(shiftedIndex++, Bagunja(numberOfBags, bagunjaName, currentBag.level+1, mutableListOf()))
             }
         }
+
     }
-    val tempst = stringus.takeLast(stringus.length-4)
-    println(tempst.take(tempst.length-1))
-    val script = ScriptEngineManager()
-    val eng: ScriptEngine = script.getEngineByName("JavaScript")
-    println(eng.eval(tempst.take(tempst.length-1)))
+    return sum-1
 }
+
+class Bagunja(val number: Int, val name: String, val level: Int, val otherBagunje: MutableList<Bagunja>?)
