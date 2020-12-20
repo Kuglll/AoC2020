@@ -1,4 +1,3 @@
-import com.sun.org.apache.xpath.internal.operations.Bool
 import java.io.File
 import java.lang.Exception
 
@@ -44,9 +43,9 @@ fun main() {
 
     //Part2
     val valuesOnTicket = tickets.get(0).split(",").size
-    val map = hashMapOf<Int, MutableList<Field>>()
+    val map = hashMapOf<Int, MutableList<Field>>() //key is field position and value is list of all possible lists
 
-    for(currentValue in 0..valuesOnTicket-1){
+    for(currentValue in 0..valuesOnTicket-1){ //go field by field
         val allFields = fields.toMutableList()
         for(ticket in tickets){
             if(validateNearbyTicketPart2(ticket, ranges)){
@@ -91,7 +90,6 @@ fun main() {
     val myTICket = tickets.get(0).split(",")
     for(key in fieldPositions.keys){
         if(key.contains("departure")){
-
             finalResult *= myTICket.get(fieldPositions[key]!!).toLong()
         }
     }
